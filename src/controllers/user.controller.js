@@ -4,7 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import Jwt from "jsonwebtoken";
-
+import fs from "fs";
 
 
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -271,6 +271,9 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         { new: true }
     ).select("-password")
 
+    //remove the localfile avatar
+    fs.unlinkSync(avatarLocalPath)
+
     return res
     .status(200)
     .json(
@@ -297,6 +300,8 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
         },
         { new: true }
     ).select("-password")
+     //remove the localfile coverImage 
+    fs.unlinkSync(coverImageLocalPath)
 
     return res
     .status(200)
